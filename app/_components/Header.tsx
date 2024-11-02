@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import {
   Navbar,
   NavbarBrand,
@@ -33,15 +34,21 @@ function Header() {
     },
   ];
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
-    <Navbar maxWidth="full">
+    <Navbar maxWidth="full" onMenuOpenChange={setIsMenuOpen}>
       <NavbarContent>
+        <NavbarMenuToggle
+        aria-label={isMenuOpen?"Close Menu":"Open Menu"}
+        className="sm:hidden" 
+        />
         <NavbarBrand>
           <Image src={"/logo.svg"} alt="Logo" width={40} height={40} />
           <h2 className="font-bold text-2xl text-primary ml-3">Kids Story</h2>
         </NavbarBrand>
       </NavbarContent>
-      <NavbarContent justify="center">
+      <NavbarContent justify="center" className="hidden sm:flex">
         {MenuList.map((item, index) => (
           <NavbarItem className="text-xl text-primary font-medium hover:underline mx-2">
             <Link href={item.path}>{item.name}</Link>
@@ -54,6 +61,13 @@ function Header() {
             Get Started
         </Button>
       </NavbarContent>
+      <NavbarMenu>
+        {MenuList.map((item, index) => (
+          <NavbarMenuItem key={index}>
+            <Link href={item.path}>{item.name}</Link>
+          </NavbarMenuItem>
+        ))}
+      </NavbarMenu>
     </Navbar>
   );
 }
