@@ -1,11 +1,17 @@
-import React from 'react'
-import {NextUIProvider} from '@nextui-org/react'
-function Provider({children}: {children: React.ReactNode}){
+import React from "react";
+import { NextUIProvider } from "@nextui-org/react";
+import { ClerkProvider } from "@clerk/nextjs";
+import Header from "./_components/Header";
+function Provider({ children }: { children: React.ReactNode }) {
   return (
-    <NextUIProvider>
+    <ClerkProvider>
+      <NextUIProvider>
+        {/* Header */}
+        <Header />
         {children}
-    </NextUIProvider>
-  )
+      </NextUIProvider>
+    </ClerkProvider>
+  );
 }
 
-export default Provider
+export default Provider;

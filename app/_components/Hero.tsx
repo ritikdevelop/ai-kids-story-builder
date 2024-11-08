@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@nextui-org/button";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 function Hero() {
@@ -16,9 +17,15 @@ function Hero() {
             adventures to life and spark their passion for reading. It only
             takes a few seconds!
           </p>
-          <Button size="lg" color="primary" className="mt-5">
-            Create Story
-          </Button>
+          <Link href={"/create-story"}>
+            <Button
+              size="lg"
+              color="primary"
+              className="mt-5 font-bold text-xl p-6"
+            >
+              Create Story
+            </Button>
+          </Link>
         </div>
         <div>
           <Image src={"/hero.png"} alt="hero" width={700} height={400} />
