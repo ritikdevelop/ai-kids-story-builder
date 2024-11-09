@@ -5,7 +5,14 @@ import StoryType from "./_components/StoryType";
 import AgeGroup from "./_components/AgeGroup";
 import ImageStyle from "./_components/ImageStyle";
 import { Button } from "@nextui-org/button";
+import { chatSession } from "@/config/GeminiAI";
+import { StoryData } from "@/config/schema";
+import { db } from "@/config/db";
 
+// @ts-ignore
+import uuid4 from "uuid4";
+import CustomLoader from "./_components/CustomLoader";
+const CREATE_STORY_PROMPT = process.env.NEXT_PUBLIC_CREATE_STORY_PROMPT;
 
 //? FieldData Interface
 export interface fieldData {
@@ -13,23 +20,75 @@ export interface fieldData {
   fieldValue: string;
 }
 //? FormDataType Interface
-export interface formDataType{
-  storySubject:string,
-  storyType:string,
-  imageStyle:string
-  ageGroup:string,
+export interface formDataType {
+  storySubject: string;
+  storyType: string;
+  imageStyle: string;
+  ageGroup: string;
 }
 
 function CreateStory() {
-
-  const [formData,setFormData] = useState<formDataType>();
+  const [formData, setFormData] = useState<formDataType>();
+  const [loading, setLoading] = useState(false);
 
   //! Handle User Selection Function
   const onHandleUserSelection = (data: fieldData) => {
     console.log(data);
-    setFormData((prev:any) => ({ ...prev, [data.fieldName]: data.fieldValue }));
+    setFormData((prev: any) => ({
+      ...prev,
+      [data.fieldName]: data.fieldValue,
+    }));
     console.log(formData);
-    // if(formData?.storySubject || formData?.ageGroup || formData?.imageStyle || formData?.storyType){setFormData({...formData,[data.fieldName]:data.fieldValue})}
+  };
+
+  //! Generate Story Function
+  const GenerateStory = async () => {
+    setLoading(true);
+    const FINAL_PROMPT = CREATE_STORY_PROMPT?.replace(
+      "{ageGroup}",
+      formData?.ageGroup ?? ""
+    )
+      .replace("{storyType}", formData?.storyType ?? "")
+      .replace("{storySubject}", formData?.storySubject ?? "")
+      .replace("{imageStyle}", formData?.imageStyle ?? "");
+
+    //* Generate AI Story
+    try {
+      // console.log(FINAL_PROMPT);
+      const result = await chatSession.sendMessage(FINAL_PROMPT);
+      console.log(result.response.text());
+      const resp = await SaveInDB(result.response.text());
+      console.log(resp);
+      setLoading(false);
+    } catch (e) {
+      console.log(e);
+      setLoading(false);
+    }
+    //* Save in DB
+
+    //* Generate Image
+  };
+
+  const SaveInDB = async (output: string) => {
+    const recordId = uuid4();
+    try {
+      setLoading(true);
+      const result = await db
+        .insert(StoryData)
+        .values({
+          storyId: recordId,
+          ageGroup: formData?.ageGroup,
+          imageStyle: formData?.imageStyle,
+          storySubject: formData?.storySubject,
+          storyType: formData?.storyType,
+          outPut: JSON.parse(output), // Renamed 'output' to 'outPut'
+        })
+        .returning({ storyId: StoryData.storyId });
+      setLoading(false);
+      return result;
+    } catch (e) {
+      setLoading(false);
+    }
   };
 
   return (
@@ -56,10 +115,16 @@ function CreateStory() {
         <ImageStyle userSelection={onHandleUserSelection} />
       </div>
       <div className="flex justify-end my-6">
-        <Button color="primary" className="p-8 text-xl">
+        <Button
+          color="primary"
+          disabled={loading}
+          className="p-8 text-xl"
+          onClick={GenerateStory}
+        >
           Generate Story
         </Button>
       </div>
+      <CustomLoader isLoading={loading} />
     </div>
   );
 }
