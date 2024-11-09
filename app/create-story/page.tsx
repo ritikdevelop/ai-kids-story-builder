@@ -12,6 +12,7 @@ import { db } from "@/config/db";
 // @ts-ignore
 import uuid4 from "uuid4";
 import CustomLoader from "./_components/CustomLoader";
+import axios from "axios";
 const CREATE_STORY_PROMPT = process.env.NEXT_PUBLIC_CREATE_STORY_PROMPT;
 
 //? FieldData Interface
@@ -56,9 +57,18 @@ function CreateStory() {
     try {
       // console.log(FINAL_PROMPT);
       const result = await chatSession.sendMessage(FINAL_PROMPT);
-      console.log(result.response.text());
-      const resp = await SaveInDB(result.response.text());
-      console.log(resp);
+      console.log(result.response.text())
+      // const story = JSON.parse(result.response.text());
+      // const imageResp = await axios.post("/api/generate-image", {
+      //   prompt:
+      //     "Add text with title:" +
+      //     story?.story_cover?.title +
+      //     "in bold text for book cover, " +
+      //     story?.story_cover?.image_prompt,
+      // });
+      // console.log(imageResp?.data);
+      // const resp = await SaveInDB(result.response.text());
+      // console.log(resp);
       setLoading(false);
     } catch (e) {
       console.log(e);
