@@ -2,6 +2,8 @@
 import React from 'react'
 import StorySubjectInput from './_components/StorySubjectInput';
 import StoryType from './_components/StoryType';
+import AgeGroup from './_components/AgeGroup';
+import ImageStyle from './_components/ImageStyle';
 
 export interface fieldData{
   fieldName:string,
@@ -24,8 +26,10 @@ function page() {
         {/* Story type */}
         <StoryType />
         {/* Age Group */}
+        <AgeGroup />
 
         {/* Image style */}
+        <ImageStyle />
       </div>
     </div>
   )

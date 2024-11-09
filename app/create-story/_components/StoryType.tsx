@@ -29,13 +29,14 @@ function StoryType() {
       <div className="grid grid-cols-3 gap-5 mt-3">
         {OptionList.map((item, index) => (
           <div
+          key={item.label}
             className={`relative grayscale hover:grayscale-0 cursor-pointer p-1 ${
               selectedOption == item.label ? "grayscale-0 border-2 rounded-3xl border-primary" : "grayscale"
             }
           `}
             onClick={() => setSelectedOption(item.label)}
           >
-            <h2 className="absolute bottom-5 text-2xl text-white text-center w-full">
+            <h2 className="absolute bottom-5 text-xl text-white text-center w-full">
               {item.label}
             </h2>
             <Image
