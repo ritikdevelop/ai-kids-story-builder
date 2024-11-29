@@ -24,6 +24,7 @@
     "@nextui-org/theme": "^2.2.11",
     "axios": "^1.7.7",
     "drizzle-orm": "^0.36.1",
+    "firebase": "^11.0.2",
     "framer-motion": "^11.11.11",
     "next": "15.0.2",
     "react": "^18.2.0",
