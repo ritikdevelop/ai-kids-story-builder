@@ -29,6 +29,7 @@ function CustomLoader({ isLoading }: any) {
                     height={300}
                     alt="loader"
                     className="w-[200px] h-[200px]"
+                    unoptimized
                   />
                   <h2 className="font-bold text-xl text-primary text-center">
                     Please wait... Story is being generated.

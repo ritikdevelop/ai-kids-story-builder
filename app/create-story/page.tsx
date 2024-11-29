@@ -58,15 +58,15 @@ function CreateStory() {
       // console.log(FINAL_PROMPT);
       const result = await chatSession.sendMessage(FINAL_PROMPT);
       console.log(result.response.text())
-      // const story = JSON.parse(result.response.text());
-      // const imageResp = await axios.post("/api/generate-image", {
-      //   prompt:
-      //     "Add text with title:" +
-      //     story?.story_cover?.title +
-      //     "in bold text for book cover, " +
-      //     story?.story_cover?.image_prompt,
-      // });
-      // console.log(imageResp?.data);
+      const story = result?.response.text();
+      const imageResp = await axios.post("/api/generate-image", {
+        prompt:
+          "Add text with title:" +
+          story?.story_cover?.title +
+          "in bold text for book cover, " +
+          story?.story_cover?.image_prompt,
+      });
+      console.log(imageResp?.data);
       // const resp = await SaveInDB(result.response.text());
       // console.log(resp);
       setLoading(false);

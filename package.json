@@ -11,6 +11,7 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@api/starryai": "file:.api/apis/starryai",
     "@clerk/nextjs": "^6.2.1",
     "@google/generative-ai": "^0.21.0",
     "@neondatabase/serverless": "^0.10.3",
